@@ -1,0 +1,84 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<script type="text/javascript">
+$.ajax({
+            url: "http://localhost/ajax.php",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+				var index = 0;
+				var html = '';
+                for(index = 0;index < data['mag_posts'].length;index++ ) {
+				    html = html + '<div class="wrap"><img src="'+data['mag_posts'][index]['MagPost'].cover_image+'" >';
+					html = html + '<p class="main"><a href="'+data['mag_posts'][index]['MagPost'].view_url+'">';
+					html = html + data['mag_posts'][index]['MagPost'].title+'</a></p><p class="sub">';
+					html = html + data['mag_posts'][index]['MagCategory'].name+'</p></div>';
+				}
+				$('.content').append(html);
+            },
+            error: function (xhr,error,errorthrown) {
+                alert("ERROR: "+error+" , "+errorthrown);
+			}
+	});
+</script>
+	<style>
+	.content {
+		background-color: grey;
+	}
+	
+	.wrap {
+		background-color: #FFFFFF;
+		clear: both;
+		/*width: 200px;*/
+		height: auto;
+	}
+	.wrap img {
+		display: block;
+		clear: both;
+		padding: 5px;
+	}
+	.main {
+		color: red;
+		clear: both;
+		font-size: 16px;
+		padding: 10px;
+	}
+	.sub {
+		color: black;
+		clear: both;
+		font-size: 14px;
+		padding: 5px;
+	}
+	</style>
+
+</head> 
+<body> 
+<div data-role="page">
+<div data-role="panel" id="mypanel" data-display="overlay" data-position="left" data-dismissible="true">
+	<!--<ul data-role="listview" data-inset="true" data-filter="true">
+	<li><a href="#">Acura</a></li>
+	<li><a href="#">Audi</a></li>
+	<li><a href="#">BMW</a></li>
+	<li><a href="#">Cadillac</a></li>
+	<li><a href="#">Ferrari</a></li>
+</ul>--->
+
+		<!-- panel content goes here -->
+	</div><!-- /panel -->
+	
+	<div data-role="header">
+	<a href="#mypanel" data-rel="panel" >Open panel</a>
+		<h1>Wedding Blog</h1>
+	</div><!-- /header -->
+	<div class="content" data-role="content">	
+	</div><!-- /content -->
+</div><!-- /page -->
+
+</body>
+</html>
