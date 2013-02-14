@@ -1,0 +1,130 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="./jquery.mobile-1.2.0.min.css" />
+	<script src="./jquery-1.8.2.min.js"></script>
+	<script src="./jquery.mobile-1.2.0.min.js"></script>
+	<script type="text/javascript">
+	var loaded = 0;
+	var count = 0;
+	$(document).ready(function () {
+	$.ajax({
+            url: "http://localhost/ajax.php",
+            type: "GET",
+            dataType: "json",
+			async: false,
+            success: function (jsontext) {
+				/*for ( var i = 0;i < jsontext['mag_posts'].length;i++)
+				{	loaded[i] = 0; }*/
+				count = jsontext['mag_posts'].length;
+				var height_container = $('.scrollbox').height();
+				var initial_posts = Math.round(height_container/224); //alert(initial_posts);
+				for ( var index = 0;index <= initial_posts/*jsontext['mag_posts'].length*/;index++ )
+				{
+					create_post(jsontext['mag_posts'][index]['MagPost'].cover_image,jsontext['mag_posts'][index]['MagPost'].view_url,jsontext['mag_posts'][index]['MagPost'].title,jsontext['mag_posts'][index]['MagCategory'].name);
+					loaded+= 1;
+				}
+            },
+            error: function (xhr,error,errorthrown) {
+                alert("ERROR: "+error+" , "+errorthrown);
+			}
+	});
+	
+	$('.scrollbox').scroll(function() {
+		if ( loaded < count ) {
+		scrollalert();
+		}
+		else { return false; }
+	});
+	});
+ function create_post(image_url,link,title,cat) {
+	var html;
+	html = '<div class="wrap"><img src="'+image_url+'" >';
+	html = html + '<p class="main"><a href="'+link+'">';
+	html = html + title +'</a></p><p class="sub"> in ';
+	html = html + cat +'</p></div>';
+	$('.content').append(html);
+ } 
+ function scrollalert(){  
+    var scrolltop=$('.scrollbox').scrollTop();  
+    var scrollheight=$('.scrollbox').outerHeight(false);  
+    var windowheight=$('.scrollbox').innerHeight();  
+    var scrolloffset=20;
+    if(scrolltop>=(scrollheight-(windowheight)) && this.loaded < this.count)  
+    {  
+        $.get('http://localhost/ajax.php?'+'id='+loaded, '', function(newitems){
+            //alert(newitems);
+			$('.content').append(newitems);  
+			//this.loaded=+1;
+            //updatestatus();  
+        });  
+	//	}
+	this.loaded+=1;
+    }  
+    //setTimeout('scrollalert();', 1500);  
+}
+	
+</script>
+	<style>
+	body {
+		height: 100%;
+	}
+	.scrollbox {
+		background-color: grey;
+		height: 80%;
+		overflow: scroll;
+		overflow-x: hidden;
+	}
+	
+	.wrap {
+		background-color: #FFFFFF;
+		clear: both;
+		/*width: 200px;*/
+		height: auto;
+	}
+	.wrap img {
+		display: block;
+		clear: both;
+		padding: 5px;
+	}
+	.main {
+		color: red;
+		clear: both;
+		font-size: 16px;
+		padding: 10px;
+	}
+	.sub {
+		color: black;
+		clear: both;
+		font-size: 14px;
+		padding: 5px;
+	}
+	.page {
+		height:90%;
+		}
+	.footer {
+		height:10%;
+	}
+	
+	</style>
+
+</head> 
+<body> 
+<div class="page" data-role="page">
+	<div class="header" data-role="header">
+		<h1>Wedding Blog</h1>
+	</div><!-- /header -->
+	<div class="scrollbox" data-role="content">
+		<div class="content">
+		</div>
+	</div><!-- /content -->
+	<div data-role="footer">
+		<h1>Footer</h1>
+	</div><!-- /footer -->
+
+	</div><!-- /page -->
+
+</body>
+</html>
