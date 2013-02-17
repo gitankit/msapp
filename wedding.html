@@ -1,27 +1,28 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>  
 <html> 
 <head> 
     <title>My Page</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet" href="./jquery.mobile-1.2.0.min.css" />
 	<script src="./jquery-1.8.2.min.js"></script>
-	<script src="./jquery.mobile-1.2.0.min.js"></script>
+	<link rel="stylesheet" href="./jquery.mobile-1.3.0-rc.1.min.css" />
+	<script src="./jquery.mobile-1.3.0-rc.1.min.js"></script>
+<!--	<link rel="stylesheet" href="./jquery.mobile-1.2.0.min.css" />
+	<script src="./jquery.mobile-1.2.0.min.js"></script>-->
 	<script type="text/javascript">
 	var loaded = 0;
 	var count = 0;
+	var host = '115.241.3.82';
 	$(document).ready(function () {
 	$.ajax({
-            url: "http://localhost/ajax.php",
+            url: "http://"+host+"/ajax.php",
             type: "GET",
             dataType: "json",
 			async: false,
             success: function (jsontext) {
-				/*for ( var i = 0;i < jsontext['mag_posts'].length;i++)
-				{	loaded[i] = 0; }*/
 				count = jsontext['mag_posts'].length;
 				var height_container = $('.scrollbox').height();
-				var initial_posts = Math.round(height_container/224); //alert(initial_posts);
-				for ( var index = 0;index <= initial_posts/*jsontext['mag_posts'].length*/;index++ )
+				var initial_posts = Math.round(height_container/224); 
+				for ( var index = 0;index <= initial_posts;index++ )
 				{
 					create_post(jsontext['mag_posts'][index]['MagPost'].cover_image,jsontext['mag_posts'][index]['MagPost'].view_url,jsontext['mag_posts'][index]['MagPost'].title,jsontext['mag_posts'][index]['MagCategory'].name);
 					loaded+= 1;
@@ -38,11 +39,12 @@
 		}
 		else { return false; }
 	});
+	$('#mypanel').hide();
 	});
  function create_post(image_url,link,title,cat) {
 	var html;
 	html = '<div class="wrap"><img src="'+image_url+'" >';
-	html = html + '<p class="main"><a href="'+link+'">';
+	html = html + '<p class="main"><a href="http://www.myshaadi.in'+link+'">';
 	html = html + title +'</a></p><p class="sub"> in ';
 	html = html + cat +'</p></div>';
 	$('.content').append(html);
@@ -54,16 +56,11 @@
     var scrolloffset=20;
     if(scrolltop>=(scrollheight-(windowheight)) && this.loaded < this.count)  
     {  
-        $.get('http://localhost/ajax.php?'+'id='+loaded, '', function(newitems){
-            //alert(newitems);
-			$('.content').append(newitems);  
-			//this.loaded=+1;
-            //updatestatus();  
-        });  
-	//	}
+        $.get('http://'+host+'/ajax.php?'+'id='+loaded, '', function(newitems){
+ 			$('.content').append(newitems);  
+       });  
 	this.loaded+=1;
     }  
-    //setTimeout('scrollalert();', 1500);  
 }
 	
 </script>
@@ -81,7 +78,6 @@
 	.wrap {
 		background-color: #FFFFFF;
 		clear: both;
-		/*width: 200px;*/
 		height: auto;
 	}
 	.wrap img {
@@ -106,23 +102,95 @@
 		}
 	.footer {
 		height:10%;
+		position: fixed;
 	}
-	
+	.header {
+		postion: fixed;
+	}
+	.content {
+		
+	}
+	.ui-panel-content-wrap {
+		height: 100%
+	}
+					.nav-search .ui-btn-up-a {
+						background-image:none;
+						background-color:#333333;
+					}
+					.nav-search .ui-btn-inner {
+						border-top: 1px solid #888;
+						border-color: rgba(255, 255, 255, .1);
+					}
 	</style>
 
 </head> 
-<body> 
-<div class="page" data-role="page">
+<body data-scroll="true"> 
+<div class="page" data-role="page" data-scroll="false">
 	<div class="header" data-role="header">
+		<a href="#leftpanel3" data-icon="bars" data-role="button" data-inline="true" data-display="reveal"  
+						data-position="left" data-dismissible="true" data-iconpos="notext" data-theme="a"></a>
 		<h1>Wedding Blog</h1>
 	</div><!-- /header -->
-	<div class="scrollbox" data-role="content">
-		<div class="content">
+	<div class="scrollbox" data-role="content" data-scroll="true">
+	
+	<div class="content">
+
 		</div>
 	</div><!-- /content -->
 	<div data-role="footer">
 		<h1>Footer</h1>
 	</div><!-- /footer -->
+<!--	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" data-dismissible="true" >
+				<div class="panel-content">
+					<h3>Left Panel: Overlay</h3>
+					<p>This panel is positioned on the left with the overlay display mode. The panel markup is <em>after</em> the header, content and footer in the source order.</p>
+					<p>To close, click off the panel, swipe left or right, hit the Esc key, or use the button below:</p>
+					<a href="#demo-links" data-rel="close" data-role="button"  data-icon="delete" data-inline="true">Close panel</a>
+				</div>
+	</div>-->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" data-dismissible="true" class="ui-responsive" data-theme="a" >
+				<!--<div class="panel-content">-->
+					<ul data-role="listview" data-theme="a" data-divider-theme="b" style="margin-top:-1px;" data-iconpos="none">
+					<!--<li data-icon="delete" style="background-color:#111;">
+						<a href="#" data-rel="close">Close menu</a>
+					</li>-->
+					<li><img src="./me.png"><span>Ankit Sharma</span><p>Mobile Developer</p></li>
+					<li data-role="list-divider">CATEGORIES</li>
+					<li>
+						<a href="">Health & Beauty</a>
+					</li>
+					<li>
+						<a href="">Honeymoon</a>
+					</li>
+					<li>
+						<a href="">Ideas & Trends</a>
+					</li>
+					<li>
+						<a href="">Planning</a>
+					</li>
+					<li>
+						<a href="">Relationship</a>
+					</li>
+					<li>
+						<a href="">Trousseau</a>
+					</li>
+					<li data-role="list-divider">MENU</li>
+					<li>
+						<a href="">Home</a>
+					</li>
+					<li>
+						<a href="">Gallery</a>
+					</li>
+					<li>
+						<a href="">Create Wedsite</a>
+					</li>
+					<li>
+						<a href="">Help</a>
+					</li>
+				</ul>
+			<!--</div>-->
+	</div>
+	<!-- /leftpanel3 -->
 
 	</div><!-- /page -->
 
