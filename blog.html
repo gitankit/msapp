@@ -12,7 +12,8 @@
 	var jsontext = [];//= new Object();
 	var page = 0;
 	var host = location.hostname;
-	var url_to_fetch = "http://"+host+"/sanitize.php";
+	var url_to_fetch = "http://"+host+"/ajax-dev.php";
+	var category_page = "http://"+host+"/category.html";
 	var loading = 0;
 	$(document).ready(function () {
 	$.ajax({
@@ -35,7 +36,7 @@
             error: function (xhr,error,errorthrown) {
                 alert("ERROR: "+error+" , "+errorthrown);
 			}
-	}); //alert(jsontext.mag_posts[0].MagPost.title);
+	}); 
 	$('.scrollbox').scroll(function() {
 		if ( loading == 0 ) {	
 			scrollalert();
@@ -44,18 +45,12 @@
 			return false;
 		}
 	});
-	$(".category").click(function() {
-		alert("Cat id:");//+$(this).attr('data-category').val());
+	/*** When clicked on a category , set the local storage for the clicked category id ***/
+	$(document).on("click",".category",function() {
+		sessionStorage.clickCategory = $(this).attr('data-category');
+		window.location.href = category_page;
 	});
 	});
- /*function create_post(image_url,link,title,cat) {
-	var html;
-	html = '<div class="wrap"><img src="'+image_url+'" >';
-	html = html + '<p class="main"><a href="http://www.myshaadi.in'+link+'">';
-	html = html + title +'</a></p><p class="sub"> in ';
-	html = html + cat +'</p></div>';
-	$('.content').append(html);
- } */
  function create_post(json,key,caller) {
  	var post_id = json.mag_posts[key].MagPost.id;
  	var image_url = json.mag_posts[key].MagPost.cover_image;
@@ -66,33 +61,29 @@
 	var html;
 	html = '<div class="wrap"><img src="'+image_url+'" >';
 	html = html + '<p class="main"><a href="http://www.myshaadi.in'+link+'" data-post="'+ post_id +'">';
-	html = html + title + '</a></p><p class="sub"> in <a href="" class="category"';
+	html = html + title + '</a></p><p class="sub"> in <a class="category"';
 	html = html + ' data-category="' + cat_id + '">' + cat +'</a></p></div>';
 	$('.content').append(html);
-	//alert("loaded");
  } 
  function scrollalert(){
-//	if( scrolltop > (scrollheight-(windowheight)) && loading == 0 )  {
 		if ( loaded < count) 
 			{
 				var scrolltop=$('.scrollbox').scrollTop();  
 				var scrollheight=$('.content').innerHeight();  
 				var windowheight=$('.scrollbox').innerHeight();
 				if( scrolltop > (scrollheight-(windowheight)) && loading == 0 )  {
-
-				loading = 1;
-				create_post(jsontext,loaded,1);
-				loaded+=1;
-				loading = 0;
-			}}
+					loading = 1;
+					create_post(jsontext,loaded,1);
+					loaded+=1;
+					loading = 0;
+				}
+			}
 		else
 			{
-				//alert("else reached");
 				var scrolltop=$('.scrollbox').scrollTop();  
 				var scrollheight=$('.content').innerHeight();  
 				var windowheight=$('.scrollbox').innerHeight();
 				if( scrolltop > (scrollheight-(windowheight)) && loading == 0 )  {
-						//alert(jsontext.last_reached);
 					if ( jsontext.last_reached=="true" ) {
 						return false;
 					}
@@ -123,8 +114,7 @@
 					}
 				}
 			}
-		//}
-	}	
+		}	
 </script>
 	<style>
 	body {
@@ -172,6 +162,12 @@
 	}
 	.content {
 		
+	}
+	a {
+		cursor: pointer;
+	}
+	a:hover {
+		color: blue;
 	}
 	.ui-panel-content-wrap {
 		height: 100%
