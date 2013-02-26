@@ -12,26 +12,11 @@
 	var jsontext = [];//= new Object();
 	var page = 0;
 	var host = location.hostname;
-	var url_to_fetch = "http://"+host+"/sanitize.php";
-	var category_page = "http://"+host+"/category.html";
+	var url_to_fetch = "http://"+host+"/msapp/sanitize.php";
+	var category_page = "http://"+host+"/msapp/category.html";
 	var loading = 0;
 	var cat_to_be_fetch = 0;
-	/*$(document).ready(function(){
-		if ( sessionStorage.clickCategory ) {
-			alert("Cat :"+sessionStorage.clickCategory);
-			sessionStorage.clickCategory = "";
-		}
-	});*/
 	$(document).ready(function () {
-	/*	if ( sessionStorage.clickCategory )
-		{
-			//cat_to_be_fetch = sessionStorage.clickCategory;
-			//sessionStorage.clickCategory = "";
-		}
-		else
-		{
-			sessionStorage.clickCategory = 0;
-		}*/
 	$.ajax({
             url: url_to_fetch,
             type: "GET",
