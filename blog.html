@@ -14,7 +14,26 @@
 	var host = location.hostname;
 	var url_to_fetch = "http://"+host+"/msapp/sanitize.php";
 	var category_page = "http://"+host+"/msapp/category.html";
+	var post_page = "http://"+host+"/msapp/post.html";
+	var url_to_fetch_for_cat = "http://"+host+"/msapp/sanitize_cat.php";
 	var loading = 0;
+	$.holdReady(true);
+	$.ajax ({
+			url: url_to_fetch_for_cat,
+			type: "GET",
+			dataType: "json",
+			async: "false",
+			success: function (clone) {
+				jQuery.each(clone.mag_categories,function (index,cat){
+					create_category(cat.MagCategory.id,cat.MagCategory.name);
+				});
+			},
+			error: function(xhr,error,errorthrown) {
+				alert("ERROR: "+error+" , "+errorthrown);
+			}
+	}).done(function(){
+		$.holdReady(false);	
+	});
 	$(document).ready(function () {
 	$.ajax({
             url: url_to_fetch,
@@ -49,6 +68,12 @@
 	$(document).on("click",".category",function() {
 		sessionStorage.clickCategory = $(this).attr('data-category');
 		window.location.href = category_page;
+		//$.mobile.changePage(category_page,{transition:"slide"});
+	});
+	/*** When clicked on a post , set the local storage for the clicked post id ***/
+	$(document).on("click",".post-title",function() {
+		sessionStorage.clickPost = $(this).attr('data-post');
+		window.location.href = post_page;
 	});
 	});
  function create_post(json,key,caller) {
@@ -60,11 +85,16 @@
  	var cat_id = json.mag_posts[key].MagCategory.id;
 	var html;
 	html = '<div class="wrap"><img src="'+image_url+'" >';
-	html = html + '<p class="main"><a href="http://www.myshaadi.in'+link+'" data-post="'+ post_id +'">';
-	html = html + title + '</a></p><p class="sub"> in <a class="category"';
+	html = html + '<p class="main"><a href="" data-post="'+ post_id +'" class="post-title">';
+	html = html + title + '</a></p><p class="sub"> in <a class="category" ';
 	html = html + ' data-category="' + cat_id + '">' + cat +'</a></p></div>';
 	$('.content').append(html);
  } 
+ function create_category(cat_id,cat_name) {
+ 	var html;
+ 	html = '<li><a class="category" data-category="'+ cat_id +'">'+ cat_name +'</a></li>';
+ 	$('.cat-divider').after(html);
+ }
  function scrollalert(){
 		if ( loaded < count) 
 			{
@@ -203,25 +233,7 @@
 				<!--<div class="panel-content">-->
 					<ul data-role="listview" data-theme="a" data-divider-theme="b" style="margin-top:-1px;" data-iconpos="none">
 					<li><img src="./me.png"><span>Ankit Sharma</span><p>Mobile Developer</p></li>
-					<li data-role="list-divider">CATEGORIES</li>
-					<li>
-						<a href="">Health & Beauty</a>
-					</li>
-					<li>
-						<a href="">Honeymoon</a>
-					</li>
-					<li>
-						<a href="">Ideas & Trends</a>
-					</li>
-					<li>
-						<a href="">Planning</a>
-					</li>
-					<li>
-						<a href="">Relationship</a>
-					</li>
-					<li>
-						<a href="">Trousseau</a>
-					</li>
+					<li data-role="list-divider" class="cat-divider">CATEGORIES</li>
 					<li data-role="list-divider">MENU</li>
 					<li>
 						<a href="">Home</a>
