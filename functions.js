@@ -21,7 +21,7 @@
  	var cat_id = json.mag_posts[key].MagCategory.id;
 	var html;
 	html = '<div class="wrap"><img src="'+image_url+'" >';
-	html = html + '<div class="info_container"><p class="main"><a href="" data-post="'+ post_id +'" class="post-title">';
+	html = html + '<div class="info_container"><p class="main"><a href="post.html" data-post="'+ post_id +'" data-transition="slide" class="post-title">';
 	html = html + title + '</a></p><p class="sub"> in <a class="category" ';
 	html = html + ' data-category="' + cat_id + '">' + cat +'</a></p></div></div>';
 	$('.content').append(html);
