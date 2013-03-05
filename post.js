@@ -15,7 +15,7 @@
 	
 	var loading = 0;
 	var cat_to_be_fetch = 0;
-	var is_post;
+	var id_post;
 	var id_category;
 	$.holdReady(true);
 	$.ajax ({
@@ -63,4 +63,4 @@
 		sessionStorage.clickCategory = $(this).attr('data-category') ;
 		window.location.href = category_page;
 	});
-});
+
